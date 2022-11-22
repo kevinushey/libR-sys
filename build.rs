@@ -490,7 +490,14 @@ fn main() {
 
     // make sure cargo links properly against library
     println!("cargo:rustc-link-search={}", r_paths.library.display());
-    println!("cargo:rustc-link-lib=dylib=R");
+
+    // don't explicitly link to libR on macOS
+    if cfg!(target_os = "macos") {
+        println!("cargo:rustc-link-arg=-undefined");
+        println!("cargo:rustc-link-arg=dynamic_lookup");
+    } else {
+        println!("cargo:rustc-link-lib=dylib=R");
+    }
 
     println!("cargo:rerun-if-changed=build.rs");
     println!("cargo:rerun-if-changed=wrapper.h");
