@@ -492,7 +492,7 @@ fn main() {
     println!("cargo:rustc-link-search={}", r_paths.library.display());
 
     // don't explicitly link to libR on macOS
-    if cfg!(target_os = "macos") {
+    if cfg!(target_os = "macos") && !cfg!(test) {
         println!("cargo:rustc-link-arg=-undefined");
         println!("cargo:rustc-link-arg=dynamic_lookup");
     } else {
